@@ -1,0 +1,18 @@
+1) Am un sistem de pagini:
+	- o pagina are un set de pagini urmatoare posibile si un set de actiuni posibile
+
+
+
+
+
+
+
+1) Factory pattern - instantiaza obiecte si ascunde implementarea constructorului
+2) Observer pattern - are un subiect si un set de listeneri care reactioneaza la schimbarile din subiect
+3) Strategy pattern - alege un mod de rezolvare la instantiere si actioneaza in functie de aceasta strategie
+4) Commander pattern - abstractizeaza un set de comenzi; poate fi useful pt ca are undo 
+5) Builder pattern - construieste obiecte ce pot avea parametrii optionali 
+
+
+
+*) refactoring guru - pentru patterns
