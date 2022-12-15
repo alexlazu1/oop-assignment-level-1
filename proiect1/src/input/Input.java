@@ -1,31 +1,28 @@
 package input;
 
-import movie.Movie;
-import user.User;
-
 import java.util.ArrayList;
 
 public class Input {
-    private ArrayList<User> users;
-    private ArrayList<Movie> movies;
+    private ArrayList<UserInput> users;
+    private ArrayList<MovieInput> movies;
     private ArrayList<ActionsInput> actions;
 
     public Input() {
     }
 
-    public ArrayList<User> getUsers() {
+    public ArrayList<UserInput> getUsers() {
         return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
+    public void setUsers(ArrayList<UserInput> users) {
         this.users = users;
     }
 
-    public ArrayList<Movie> getMovies() {
+    public ArrayList<MovieInput> getMovies() {
         return movies;
     }
 
-    public void setMovies(ArrayList<Movie> movies) {
+    public void setMovies(ArrayList<MovieInput> movies) {
         this.movies = movies;
     }
 

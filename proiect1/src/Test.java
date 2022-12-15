@@ -136,12 +136,15 @@ public final class Test {
         for (final File testFile : Objects.requireNonNull(TEST_INPUTS_FILE.listFiles())) {
             String testFileName = testFile.getName();
 
-            preTestCleanUp();
+            // CHANGE HERE TO NEXT TEST
+            if (testFileName.equals("basic_1.json")) {
+                preTestCleanUp();
 
-            final String[] testArgv = createTestArgv(testFile);
-            final Future<Object> future = createTimerTask(testArgv);
+                final String[] testArgv = createTestArgv(testFile);
+                final Future<Object> future = createTimerTask(testArgv);
 
-            runTest(testFileName, config, future);
+                runTest(testFileName, config, future);
+            }
         }
 
         score += Checkstyle.testCheckstyle();

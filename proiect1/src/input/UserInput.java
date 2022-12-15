@@ -1,13 +1,13 @@
-package user;
+package input;
 
-public class User {
-    private Credentials credentials;
+public class UserInput {
+    private CredentialsInput credentials;
 
-    public Credentials getCredentials() {
+    public CredentialsInput getCredentials() {
         return credentials;
     }
 
-    public void setCredentials(Credentials credentials) {
+    public void setCredentials(CredentialsInput credentials) {
         this.credentials = credentials;
     }
 
