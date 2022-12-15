@@ -7,12 +7,13 @@
 
 
 
+
 1) Factory pattern - instantiaza obiecte si ascunde implementarea constructorului
 2) Observer pattern - are un subiect si un set de listeneri care reactioneaza la schimbarile din subiect
 3) Strategy pattern - alege un mod de rezolvare la instantiere si actioneaza in functie de aceasta strategie
 4) Commander pattern - abstractizeaza un set de comenzi; poate fi useful pt ca are undo 
 5) Builder pattern - construieste obiecte ce pot avea parametrii optionali 
-
+6) Singleton pattern - instantiaza un obiect la runtime
 
 
 *) refactoring guru - pentru patterns
