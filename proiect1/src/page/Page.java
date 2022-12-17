@@ -39,10 +39,11 @@ public abstract class Page {
 class HomeNotAuth extends Page {
     public HomeNotAuth() {
         type = PageType.HomeNotAuth;
-        nextPages = new ArrayList<>(List.of(PageType.Register,PageType.Login));
+        nextPages = new ArrayList<>(List.of(PageType.Register, PageType.Login));
         features = new ArrayList<>();
     }
 }
+
 class Login extends Page {
     public Login() {
         type = PageType.Login;
@@ -62,7 +63,7 @@ class Register extends Page {
 class HomeAuth extends Page {
     public HomeAuth() {
         type = PageType.HomeAuth;
-        nextPages = new ArrayList<>(List.of(PageType.Logout,PageType.Movies, PageType.Upgrades));
+        nextPages = new ArrayList<>(List.of(PageType.Logout, PageType.Movies, PageType.Upgrades));
         features = new ArrayList<>();
     }
 }
@@ -71,7 +72,7 @@ class Movies extends Page {
     public Movies() {
         type = PageType.Movies;
 
-        nextPages = new ArrayList<>(List.of(PageType.HomeNotAuth,PageType.SeeDetails, PageType.Logout));
+        nextPages = new ArrayList<>(List.of(PageType.HomeNotAuth, PageType.SeeDetails, PageType.Logout));
         features = new ArrayList<>(List.of("search", "filter"));
 
         Viewmodel.getInstance().loadMovies();
@@ -82,7 +83,7 @@ class Upgrades extends Page {
     public Upgrades() {
         type = PageType.Upgrades;
 
-        nextPages = new ArrayList<>(List.of(PageType.HomeAuth,PageType.Movies, PageType.Logout));
+        nextPages = new ArrayList<>(List.of(PageType.HomeAuth, PageType.Movies, PageType.Logout));
         features = new ArrayList<>(List.of("buy premium account", "buy tokens"));
     }
 }
@@ -90,8 +91,8 @@ class Upgrades extends Page {
 class SeeDetails extends Page {
     public SeeDetails() {
         type = PageType.SeeDetails;
-        nextPages = new ArrayList<>(List.of(PageType.HomeAuth,PageType.Movies, PageType.Upgrades, PageType.Logout));
-        features = new ArrayList<>(List.of("purchase")); // TODO: ADD WATCH, LIKE, RATE MOVIE
+        nextPages = new ArrayList<>(List.of(PageType.HomeAuth, PageType.Movies, PageType.Upgrades, PageType.Logout));
+        features = new ArrayList<>(List.of("purchase", "watch", "like", "rate"));
     }
 
 }

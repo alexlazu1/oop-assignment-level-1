@@ -1,5 +1,6 @@
 package user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import input.Credentials;
 import movie.Movie;
 import input.UserInput;
@@ -29,7 +30,7 @@ public class User {
 
     public User(User user) {
         Viewmodel viewmodel = Viewmodel.getInstance();
-        this.credentials = user.credentials;
+        this.credentials = new Credentials(user.credentials);
         this.tokensCount = user.tokensCount;
         this.numFreePremiumMovies = user.numFreePremiumMovies;
         this.purchasedMovies = viewmodel.getArrayCopy(user.purchasedMovies);
@@ -60,6 +61,9 @@ public class User {
 
     public int getNumFreePremiumMovies() {
         return numFreePremiumMovies;
+    }
+    public void decrementNumFreePremiumMovies() {
+        numFreePremiumMovies--;
     }
 
     public void setNumFreePremiumMovies(int numFreePremiumMovies) {

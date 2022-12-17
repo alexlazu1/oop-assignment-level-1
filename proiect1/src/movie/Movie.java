@@ -1,5 +1,7 @@
 package movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 
 public class Movie {
@@ -9,6 +11,8 @@ public class Movie {
     private ArrayList<String> genres;
     private ArrayList<String> countriesBanned;
     private ArrayList<String> actors;
+    @JsonIgnore
+    private ArrayList<Double> ratings;
 
     private int numLikes = 0;
     private int numRatings = 0;
@@ -85,6 +89,10 @@ public class Movie {
         this.numLikes = numLikes;
     }
 
+    public void incNumLikes() {
+        this.numLikes++;
+    }
+
     public int getNumRatings() {
         return numRatings;
     }
@@ -97,8 +105,35 @@ public class Movie {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void calculateRating() {
+        if (ratings.size() == 0) {
+            System.out.println("ERROR, SHOULDN T REACH THIS IN RATINGS\n\n\n\n\n");
+            return;
+        }
+
+        double sum = 0;
+
+        for (Double rate : ratings)
+            sum += rate;
+
+        this.rating = sum / ratings.size();
+    }
+
+    public ArrayList<Double> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(ArrayList<Double> ratings) {
+        this.ratings = ratings;
     }
 }
 

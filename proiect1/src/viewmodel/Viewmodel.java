@@ -2,10 +2,7 @@ package viewmodel;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.*;
-import movie.Filter;
-import movie.FilterContains;
-import movie.FilterSort;
-import movie.Movie;
+import movie.*;
 import page.PageFactory;
 import page.PageFactory.PageType;
 import user.User;
@@ -24,6 +21,7 @@ public class Viewmodel {
     ArrayList<User> users;
     ArrayList<Movie> movies;
     ActionsInput action;
+    Movie currentMovie;
 
     private final static Viewmodel instance = new Viewmodel();
 
@@ -40,12 +38,9 @@ public class Viewmodel {
 
         this.input = input;
         this.output = output;
+        this.currentMovie = null;
 
-
-        this.movies = new ArrayList<Movie>();
-        for (Movie movie : input.getMovies()) {
-            this.movies.add(new Movie(movie));
-        }
+        this.movies = getArrayCopy(input.getMovies());
 
         this.users = new ArrayList<User>();
         for (UserInput userInput : input.getUsers()) {
@@ -60,8 +55,10 @@ public class Viewmodel {
         if (action.getType().equals(CHANGE_PAGE)) {
             return changePage(action.getPage());
         } else {
-            if (!findFeature(action.getFeature()))
+            if (!findFeature(action.getFeature())) {
+//                System.out.println("Did not find feature: (" + action.getFeature() + ") for page: (" + state.page.getType() + ")");
                 return FEATURE_NOT_FOUND;
+            }
             switch (action.getFeature()) {
                 case "login" -> {
                     return login(action.getCredentials());
@@ -78,16 +75,111 @@ public class Viewmodel {
                 case "buy tokens" -> {
                     return buyTokens(action.getCount());
                 }
+                case "purchase" -> {
+                    return purchase(action.getMovie());
+                }
+                case "watch" -> {
+                    return watch(action.getMovie());
+                }
+                case "like" -> {
+                    return like(action.getMovie());
+                }
+                case "rate" -> {
+                    return rate(action.getMovie(), action.getRate());
+                }
+                case "buy premium account" -> {
+                    return buyPremiumAccount();
+                }
                 default -> {
-                    System.out.println("INVALID COMMAND!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n");
+                    System.out.println("INVALID COMMAND!!!!!!!!!!!!!!!!!!!" + action.getFeature() + "\n\n\n\n\n\n");
                     return "INVALID";
                 }
             }
         }
     }
 
+    public String buyPremiumAccount() {
+        User user = state.user;
+        if (user.getCredentials().getAccountType().equals("premium") || user.getTokensCount() < 10)
+            return ERROR_BUY_PREMIUM;
+
+        user.addTokens(-10);
+        user.getCredentials().setAccountType("premium");
+        return SUCCESS_BUY_PREMIUM;
+    }
+
+    public String rate(String movieName, int rate) {
+        if (movieName != null &&!currentMovie.getName().equals(movieName))
+            return ERROR_RATE_INVALID_MOVIE;
+
+        User user = state.user;
+        if (!user.getWatchedMovies().contains(currentMovie))
+            return ERROR_RATE_NOT_WATCHED;
+
+        currentMovie.getRatings().add((double) rate);
+        currentMovie.calculateRating();
+        return SUCCESS_RATE_MOVIE;
+    }
+
+    public String like(String movieName) {
+        if (movieName != null &&!currentMovie.getName().equals(movieName))
+            return ERROR_LIKE_INVALID_MOVIE;
+
+        User user = state.user;
+        if (!user.getWatchedMovies().contains(currentMovie))
+            return ERROR_LIKE_NOT_WATCHED;
+
+        currentMovie.incNumLikes();
+        user.getLikedMovies().add(currentMovie);
+        return SUCCESS_LIKE_MOVIE;
+    }
+
+    public String watch(String movieName) {
+        if (movieName != null &&!currentMovie.getName().equals(movieName))
+            return ERROR_WATCH_INVALID_MOVIE;
+
+        User user = state.user;
+        if (user.getWatchedMovies().contains(currentMovie))
+            return ERROR_WATCH_ALREADY_WATCHED;
+
+        if (!user.getPurchasedMovies().contains(currentMovie))
+            return ERROR_WATCH_NOT_PURCHASED;
+
+        user.getWatchedMovies().add(currentMovie);
+        return SUCCESS_WATCH_MOVIE;
+    }
+
+    public String purchase(String movieName) {
+        if (movieName != null &&!currentMovie.getName().equals(movieName))
+            return ERROR_PURCHASE_INVALID_MOVIE;
+
+        User user = state.user;
+        if (user.getPurchasedMovies().contains(currentMovie))
+            return ERROR_PURCHASE_ALREADY_BOUGHT;
+
+        boolean isPremium = user.getCredentials().getAccountType().equals("premium");
+
+        if (isPremium && user.getNumFreePremiumMovies() > 0) {
+            user.decrementNumFreePremiumMovies();
+            user.getPurchasedMovies().add(currentMovie);
+            return SUCCESS_PURCHASE_MOVIE;
+        } else if (user.getTokensCount() >= 2) {
+            user.addTokens(-2);
+            user.getPurchasedMovies().add(currentMovie);
+            return SUCCESS_PURCHASE_MOVIE;
+        }
+
+        return ERROR_PURCHASE_CURRENCY;
+    }
+
+
     public String buyTokens(String count) {
-        int tokens = Integer.parseInt(count);
+        int tokens = Integer.parseInt(count), balance = Integer.parseInt(state.user.getCredentials().getBalance());
+
+        if (balance < tokens)
+            return ERROR_BUY_TOKENS;
+
+        state.user.getCredentials().changeBalance(tokens);
         state.user.addTokens(tokens);
 
         return SUCCESS_BUY_TOKENS;
@@ -115,11 +207,13 @@ public class Viewmodel {
 
         if (filterSort != null) {
             int ratingSort = (filterSort.getRating().equals("increasing")) ? 1 : -1;
-            int durationSort = (filterSort.getDuration().equals("increasing")) ? 1 : -1;
+
+
             state.movies.sort((m1, m2) -> {
-                if (m1.getRating() != m2.getRating())
+                if (m1.getRating() != m2.getRating() || filterSort.getDuration() == null)
                     return (int) (ratingSort * m1.getRating() - ratingSort * m2.getRating());
                 else {
+                    int durationSort = (filterSort.getDuration().equals("increasing")) ? 1 : -1;
                     return durationSort * m1.getDuration() - durationSort * m2.getDuration();
                 }
             });
@@ -201,7 +295,6 @@ public class Viewmodel {
         return movie.getCountriesBanned().contains(country);
     }
 
-
     public void resetMovies() {
         state.movies = new ArrayList<>();
     }
@@ -210,40 +303,46 @@ public class Viewmodel {
         /* Search the page */
         for (PageType pageType : state.page.getNextPages()) {
             if (pageType.getName().equals(pageName)) {
-                System.out.println("Page(" + pageName + ") found");
-
-                // we leave movies Page
-                if (state.page.getType() == Movies) {
-                    resetMovies();
-                }
 
                 if (pageType == Logout) {
                     resetState();
+
                     return SUCCESS_PAGE_CHANGE;
                 } else if (pageType == Movies) {
                     state.page = PageFactory.createPage(pageType);
+
                     return SUCCESS_PAGE_CHANGE_MOVIES;
-                } else if (pageType == SeeDetails) {
+                } else if (pageType == PageType.SeeDetails) {
+                    System.out.println("See details of movie" + action.getMovie() + "\n\n");
 
                     for (Movie movie : state.movies) {
+//                        System.out.println("Movie name:" + movie.getName());
+
                         if (Objects.equals(movie.getName(), action.getMovie())) {
                             state.movies = new ArrayList<>();
-                            state.movies.add(new Movie(movie));
+                            state.movies.add(movie);
+
+                            currentMovie = movie;
+
                             state.page = PageFactory.createPage(pageType);
+
                             return SUCCESS_SEE_DETAILS;
                         }
                     }
+                    currentMovie = null;
+
                     return MOVIE_NOT_FOUND;
 
                 } else {
                     state.page = PageFactory.createPage(pageType);
+
                     return SUCCESS_PAGE_CHANGE;
                 }
             }
         }
 
         /* Page not found */
-        System.out.println("Page(" + pageName + ") not found");
+//        System.out.println("Page(" + pageName + ") not found");
         return PAGE_NOT_FOUND;
     }
 

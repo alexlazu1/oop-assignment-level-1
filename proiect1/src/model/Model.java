@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionsInput;
 import input.Input;
+import page.PageFactory;
 import user.User;
 import viewmodel.State;
 import viewmodel.Viewmodel;
@@ -28,7 +29,6 @@ public class Model {
     String outFileName;
 
     public Model(String inName, String outName) throws IOException {
-        System.out.println("OUT NAME:" + outName);
         this.mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         this.input = mapper.readValue(new File(inName), Input.class);
         this.output = mapper.createArrayNode();
@@ -53,11 +53,37 @@ public class Model {
 
     public void solveAction(ActionsInput action) {
         String result = viewmodel.doAction(action);
-        System.out.println("result: " + result);
+        if(state.page.getType() == PageFactory.PageType.SeeDetails)
+            System.out.println("result (" + state.page.getType() + "): " + result);
         switch (result) {
-            case USER_ALREADY_EXISTS, USER_NOT_FOUND, PAGE_NOT_FOUND, FEATURE_NOT_FOUND, MOVIE_NOT_FOUND -> addDefaultNode(ERROR);
-            case SUCCESS_LOGIN , SUCCESS_SEARCH, SUCCESS_PAGE_CHANGE_MOVIES, SUCCESS_FILTER -> addDefaultNode(null);
-            case SUCCESS_PAGE_CHANGE, SUCCESS_BUY_TOKENS -> {}
+            case USER_ALREADY_EXISTS,
+                    USER_NOT_FOUND,
+                    PAGE_NOT_FOUND,
+                    FEATURE_NOT_FOUND,
+                    MOVIE_NOT_FOUND,
+                    ERROR_PURCHASE_CURRENCY,
+                    ERROR_PURCHASE_INVALID_MOVIE,
+                    ERROR_PURCHASE_ALREADY_BOUGHT,
+                    ERROR_LIKE_NOT_WATCHED,
+                    ERROR_LIKE_INVALID_MOVIE,
+                    ERROR_RATE_INVALID_MOVIE,
+                    ERROR_RATE_NOT_WATCHED,
+                    ERROR_WATCH_INVALID_MOVIE,
+                    ERROR_WATCH_ALREADY_WATCHED,
+                    ERROR_WATCH_NOT_PURCHASED,
+                    ERROR_BUY_PREMIUM,
+                    ERROR_BUY_TOKENS-> addDefaultNode(ERROR);
+            case SUCCESS_LOGIN,
+                    SUCCESS_SEARCH,
+                    SUCCESS_PAGE_CHANGE_MOVIES,
+                    SUCCESS_SEE_DETAILS,
+                    SUCCESS_FILTER,
+                    SUCCESS_PURCHASE_MOVIE,
+                    SUCCESS_WATCH_MOVIE,
+                    SUCCESS_LIKE_MOVIE,
+                    SUCCESS_RATE_MOVIE-> addDefaultNode(null);
+            case SUCCESS_PAGE_CHANGE, SUCCESS_BUY_TOKENS, SUCCESS_BUY_PREMIUM -> {
+            }
         }
     }
 
@@ -65,9 +91,15 @@ public class Model {
         ObjectNode node = mapper.createObjectNode();
         node.put("error", error);
         //TODO: SAME AS BELLOW
-        node.putPOJO("currentMoviesList", viewmodel.getArrayCopy(state.movies));
+        if (error == null) {
+//            System.out.println("\n\nmovies: " + state.movies + "\n\n");
+            node.putPOJO("currentMoviesList", viewmodel.getArrayCopy(state.movies));
+        }
+        else
+            node.putPOJO("currentMoviesList", new ArrayList<>());
+
         if (!Objects.equals(error, ERROR) && state.user != null)
-            node.putPOJO("currentUser",  new User(state.user) );
+            node.putPOJO("currentUser", new User(state.user));
         else
             node.putPOJO("currentUser", null);
 
