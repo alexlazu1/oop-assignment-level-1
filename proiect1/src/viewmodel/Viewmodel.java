@@ -109,8 +109,11 @@ public class Viewmodel {
     }
 
     public String rate(String movieName, int rate) {
-        if (movieName != null &&!currentMovie.getName().equals(movieName))
+        if (movieName != null && !currentMovie.getName().equals(movieName))
             return ERROR_RATE_INVALID_MOVIE;
+
+        if (rate > 5 || rate < 0)
+            return ERROR_RATE_INVALID_RATE;
 
         User user = state.user;
         if (!user.getWatchedMovies().contains(currentMovie))
@@ -118,11 +121,12 @@ public class Viewmodel {
 
         currentMovie.getRatings().add((double) rate);
         currentMovie.calculateRating();
+        user.getRatedMovies().add(currentMovie);
         return SUCCESS_RATE_MOVIE;
     }
 
     public String like(String movieName) {
-        if (movieName != null &&!currentMovie.getName().equals(movieName))
+        if (movieName != null && !currentMovie.getName().equals(movieName))
             return ERROR_LIKE_INVALID_MOVIE;
 
         User user = state.user;
@@ -135,7 +139,7 @@ public class Viewmodel {
     }
 
     public String watch(String movieName) {
-        if (movieName != null &&!currentMovie.getName().equals(movieName))
+        if (movieName != null && !currentMovie.getName().equals(movieName))
             return ERROR_WATCH_INVALID_MOVIE;
 
         User user = state.user;
@@ -150,7 +154,7 @@ public class Viewmodel {
     }
 
     public String purchase(String movieName) {
-        if (movieName != null &&!currentMovie.getName().equals(movieName))
+        if (movieName != null && !currentMovie.getName().equals(movieName))
             return ERROR_PURCHASE_INVALID_MOVIE;
 
         User user = state.user;
@@ -186,6 +190,7 @@ public class Viewmodel {
     }
 
     public String filter(Filter filter) {
+
         loadMovies();
         ArrayList<Movie> newMovies = new ArrayList<>();
         FilterSort filterSort = filter.getSort();
@@ -206,16 +211,23 @@ public class Viewmodel {
         state.movies = newMovies;
 
         if (filterSort != null) {
-            int ratingSort = (filterSort.getRating().equals("increasing")) ? 1 : -1;
-
-
             state.movies.sort((m1, m2) -> {
-                if (m1.getRating() != m2.getRating() || filterSort.getDuration() == null)
-                    return (int) (ratingSort * m1.getRating() - ratingSort * m2.getRating());
-                else {
+                int comp = 0;
+
+                if (filterSort.getDuration() != null) {
                     int durationSort = (filterSort.getDuration().equals("increasing")) ? 1 : -1;
-                    return durationSort * m1.getDuration() - durationSort * m2.getDuration();
+
+                    comp = durationSort * m1.getDuration() - durationSort * m2.getDuration();
+
+                    if (comp != 0)
+                        return comp;
                 }
+                if (filterSort.getRating() != null) {
+                    int ratingSort = (filterSort.getRating().equals("increasing")) ? 1 : -1;
+
+                    comp = (int) (ratingSort * m1.getRating() - ratingSort * m2.getRating());
+                }
+                return comp;
             });
         }
 
@@ -224,8 +236,9 @@ public class Viewmodel {
 
     public String search(String startsWith) {
         ArrayList<Movie> newMovies = new ArrayList<>();
+        loadMovies();
 
-        for (Movie movie : movies) {
+        for (Movie movie : state.movies) {
             if (movie.getName().startsWith(startsWith))
                 newMovies.add(movie);
         }
@@ -313,7 +326,7 @@ public class Viewmodel {
 
                     return SUCCESS_PAGE_CHANGE_MOVIES;
                 } else if (pageType == PageType.SeeDetails) {
-                    System.out.println("See details of movie" + action.getMovie() + "\n\n");
+                    System.out.println("See details of movie: (" + action.getMovie() + ")\n\n");
 
                     for (Movie movie : state.movies) {
 //                        System.out.println("Movie name:" + movie.getName());

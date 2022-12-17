@@ -12,7 +12,7 @@ public class Movie {
     private ArrayList<String> countriesBanned;
     private ArrayList<String> actors;
     @JsonIgnore
-    private ArrayList<Double> ratings;
+    private ArrayList<Double> ratings = new ArrayList<>();
 
     private int numLikes = 0;
     private int numRatings = 0;
@@ -101,6 +101,7 @@ public class Movie {
         this.numRatings = numRatings;
     }
 
+
     public double getRating() {
         return rating;
     }
@@ -126,6 +127,7 @@ public class Movie {
             sum += rate;
 
         this.rating = sum / ratings.size();
+        this.numRatings++;
     }
 
     public ArrayList<Double> getRatings() {

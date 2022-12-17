@@ -14,6 +14,7 @@ public final class Constants {
     public static final String ERROR_LIKE_INVALID_MOVIE = "error like invalid movie";
     public static final String ERROR_RATE_INVALID_MOVIE = "error rate invalid movie";
     public static final String ERROR_RATE_NOT_WATCHED = "error rate not watched";
+    public static final String ERROR_RATE_INVALID_RATE = "error rate invalid rate";
     public static final String ERROR_BUY_PREMIUM= "error buy premium";
     public static final String ERROR_BUY_TOKENS = "error buy tokens";
     public static final String SUCCESS_PAGE_CHANGE = "success page change";

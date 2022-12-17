@@ -137,7 +137,7 @@ public final class Test {
             String testFileName = testFile.getName();
 
             // CHANGE HERE TO NEXT TEST
-            if (testFileName.equals("basic_6.json")) {
+            if (testFileName.equals("basic_10.json")) {
                 preTestCleanUp();
 
                 final String[] testArgv = createTestArgv(testFile);
