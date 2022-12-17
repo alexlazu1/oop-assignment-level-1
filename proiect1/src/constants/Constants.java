@@ -8,6 +8,7 @@ public final class Constants {
     public static final String SUCCESS_PAGE_CHANGE = "success page change";
     public static final String SUCCESS_PAGE_CHANGE_MOVIES = "success page change movies";
     public static final String SUCCESS_SEARCH = "success search";
+    public static final String SUCCESS_FILTER = "success filter";
     public static final String PAGE_NOT_FOUND = "page not found";
     public static final String USER_NOT_FOUND = "user not found";
     public static final String FEATURE_NOT_FOUND = "feature not found";

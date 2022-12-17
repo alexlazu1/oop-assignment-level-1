@@ -2,11 +2,16 @@ package viewmodel;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.*;
+import movie.Filter;
+import movie.FilterContains;
+import movie.FilterSort;
 import page.PageFactory;
 import page.PageFactory.PageType;
 import user.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static constants.Constants.*;
 import static page.PageFactory.PageType.Logout;
@@ -65,12 +70,51 @@ public class Viewmodel {
                 case "search" -> {
                     return search(action.getStartsWith());
                 }
+                case "filter" -> {
+                    return filter(action.getFilters());
+                }
                 default -> {
                     System.out.println("INVALID COMMAND!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n");
                     return "INVALID";
                 }
             }
         }
+    }
+
+    public String filter(Filter filter) {
+        ArrayList<Movie> copyMovies = getArrayCopy(movies);
+        ArrayList<Movie> newMovies = new ArrayList<>();
+        FilterSort filterSort = filter.getSort();
+        FilterContains filterContains = filter.getContains();
+
+        if (filterContains != null) {
+            ArrayList<String> actors = filterContains.getActors();
+            ArrayList<String> genre = filterContains.getGenre();
+            for (Movie movie : copyMovies) {
+                if ((actors.size() > 0 && !movie.getActors().containsAll(actors))
+                        || (genre.size() > 0 && !movie.getGenres().containsAll(genre)))
+                    continue;
+                newMovies.add(movie);
+            }
+        }
+        if (filterSort != null) {
+            int ratingSort = (filterSort.getRating().equals("increasing")) ? 1 : -1;
+            int durationSort = (filterSort.getDuration().equals("increasing")) ? 1 : -1;
+            newMovies.sort(new Comparator<Movie>() {
+                @Override
+                public int compare(Movie m1, Movie m2) {
+                    if (m1.getRating() != m2.getRating())
+                        return (int) (ratingSort * m1.getRating() - ratingSort * m2.getRating());
+                    else {
+                        return durationSort * m1.getDuration() - durationSort * m2.getDuration();
+                    }
+                }
+            });
+        }
+
+        state.movies = newMovies;
+
+        return SUCCESS_FILTER;
     }
 
     public String search(String startsWith) {
@@ -146,19 +190,28 @@ public class Viewmodel {
         return movie.getCountriesBanned().contains(country);
     }
 
+
+    public void resetMovies() {
+        state.movies = new ArrayList<>();
+    }
+
     public String changePage(String pageName) {
         /* Search the page */
         for (PageType pageType : state.page.getNextPages()) {
             if (pageType.getName().equals(pageName)) {
                 System.out.println("Page(" + pageName + ") found");
 
+                if (state.page.getType() == Movies) {
+                    resetMovies();
+                }
+
                 if (pageType == Logout) {
                     resetState();
                 } else {
                     state.page = PageFactory.createPage(pageType);
-                    if (pageType == Movies)
+                    if (pageType == Movies) {
                         return SUCCESS_PAGE_CHANGE_MOVIES;
-                    else
+                    } else
                         return SUCCESS_PAGE_CHANGE;
                 }
             }

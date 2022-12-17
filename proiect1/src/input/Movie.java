@@ -1,6 +1,7 @@
 package input;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Movie {
     private String name;
@@ -101,3 +102,4 @@ public class Movie {
         this.rating = rating;
     }
 }
+

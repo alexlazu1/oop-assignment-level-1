@@ -56,7 +56,7 @@ public class Model {
         System.out.println("result: " + result);
         switch (result) {
             case USER_ALREADY_EXISTS, USER_NOT_FOUND, PAGE_NOT_FOUND, FEATURE_NOT_FOUND -> addDefaultNode(ERROR);
-            case SUCCESS_LOGIN , SUCCESS_SEARCH, SUCCESS_PAGE_CHANGE_MOVIES -> addDefaultNode(null);
+            case SUCCESS_LOGIN , SUCCESS_SEARCH, SUCCESS_PAGE_CHANGE_MOVIES, SUCCESS_FILTER -> addDefaultNode(null);
             case SUCCESS_PAGE_CHANGE -> {}
         }
     }
