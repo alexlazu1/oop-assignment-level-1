@@ -4,15 +4,11 @@ public final class Constants {
     public static final String CHANGE_PAGE = "change page";
     public static final String SUCCESS_LOGIN = "success login";
     public static final String ERROR = "Error";
-    public static final String ERROR_PURCHASE_INVALID_MOVIE = "error purchase invalid movie";
     public static final String ERROR_PURCHASE_ALREADY_BOUGHT = "error purchase already bought";
     public static final String ERROR_PURCHASE_CURRENCY = "error purchase not enough currency";
-    public static final String ERROR_WATCH_INVALID_MOVIE = "error watch invalid movie";
     public static final String ERROR_WATCH_ALREADY_WATCHED = "error watch already watched";
     public static final String ERROR_WATCH_NOT_PURCHASED = "error watch not purchased";
     public static final String ERROR_LIKE_NOT_WATCHED = "error like not watched";
-    public static final String ERROR_LIKE_INVALID_MOVIE = "error like invalid movie";
-    public static final String ERROR_RATE_INVALID_MOVIE = "error rate invalid movie";
     public static final String ERROR_RATE_NOT_WATCHED = "error rate not watched";
     public static final String ERROR_RATE_INVALID_RATE = "error rate invalid rate";
     public static final String ERROR_BUY_PREMIUM= "error buy premium";

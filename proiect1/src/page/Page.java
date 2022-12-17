@@ -72,7 +72,7 @@ class Movies extends Page {
     public Movies() {
         type = PageType.Movies;
 
-        nextPages = new ArrayList<>(List.of(PageType.HomeNotAuth, PageType.SeeDetails, PageType.Logout));
+        nextPages = new ArrayList<>(List.of(PageType.HomeNotAuth, PageType.SeeDetails, PageType.Logout, PageType.Movies));
         features = new ArrayList<>(List.of("search", "filter"));
 
         Viewmodel.getInstance().loadMovies();

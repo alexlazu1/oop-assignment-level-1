@@ -57,15 +57,11 @@ public class Model {
             System.out.println("result (" + state.page.getType() + "): " + result);
         switch (result) {
             case USER_ALREADY_EXISTS,
-                    ERROR_PURCHASE_INVALID_MOVIE,
                     ERROR_PURCHASE_ALREADY_BOUGHT,
                     ERROR_PURCHASE_CURRENCY,
-                    ERROR_WATCH_INVALID_MOVIE,
                     ERROR_WATCH_ALREADY_WATCHED,
                     ERROR_WATCH_NOT_PURCHASED,
                     ERROR_LIKE_NOT_WATCHED,
-                    ERROR_LIKE_INVALID_MOVIE, // TODO: ERROR_LIKE_ALREADY_LIKED
-                    ERROR_RATE_INVALID_MOVIE,
                     ERROR_RATE_NOT_WATCHED,
                     ERROR_BUY_PREMIUM,
                     ERROR_BUY_TOKENS,

@@ -2,7 +2,7 @@ package input;
 
 import movie.Filter;
 
-public class ActionsInput {
+public final class ActionsInput {
     private String type;
     private String page;
     private Credentials credentials;
@@ -22,7 +22,7 @@ public class ActionsInput {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -30,7 +30,7 @@ public class ActionsInput {
         return page;
     }
 
-    public void setPage(String page) {
+    public void setPage(final String page) {
         this.page = page;
     }
 
@@ -38,7 +38,7 @@ public class ActionsInput {
         return credentials;
     }
 
-    public void setCredentials(Credentials credentials) {
+    public void setCredentials(final Credentials credentials) {
         this.credentials = credentials;
     }
 
@@ -46,7 +46,7 @@ public class ActionsInput {
         return feature;
     }
 
-    public void setFeature(String feature) {
+    public void setFeature(final String feature) {
         this.feature = feature;
     }
 
@@ -54,7 +54,7 @@ public class ActionsInput {
         return filters;
     }
 
-    public void setFilters(Filter filters) {
+    public void setFilters(final Filter filters) {
         this.filters = filters;
     }
 
@@ -62,7 +62,7 @@ public class ActionsInput {
         return movie;
     }
 
-    public void setMovie(String movie) {
+    public void setMovie(final String movie) {
         this.movie = movie;
     }
 
@@ -70,7 +70,7 @@ public class ActionsInput {
         return startsWith;
     }
 
-    public void setStartsWith(String startsWith) {
+    public void setStartsWith(final String startsWith) {
         this.startsWith = startsWith;
     }
 
@@ -78,7 +78,7 @@ public class ActionsInput {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(final String count) {
         this.count = count;
     }
 
@@ -86,7 +86,7 @@ public class ActionsInput {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(final int rate) {
         this.rate = rate;
     }
 

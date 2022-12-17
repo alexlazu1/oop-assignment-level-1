@@ -76,16 +76,16 @@ public class Viewmodel {
                     return buyTokens(action.getCount());
                 }
                 case "purchase" -> {
-                    return purchase(action.getMovie());
+                    return purchase();
                 }
                 case "watch" -> {
-                    return watch(action.getMovie());
+                    return watch();
                 }
                 case "like" -> {
-                    return like(action.getMovie());
+                    return like();
                 }
                 case "rate" -> {
-                    return rate(action.getMovie(), action.getRate());
+                    return rate( action.getRate());
                 }
                 case "buy premium account" -> {
                     return buyPremiumAccount();
@@ -108,10 +108,7 @@ public class Viewmodel {
         return SUCCESS_BUY_PREMIUM;
     }
 
-    public String rate(String movieName, int rate) {
-        if (movieName != null && !currentMovie.getName().equals(movieName))
-            return ERROR_RATE_INVALID_MOVIE;
-
+    public String rate(int rate) {
         if (rate > 5 || rate < 0)
             return ERROR_RATE_INVALID_RATE;
 
@@ -121,27 +118,24 @@ public class Viewmodel {
 
         currentMovie.getRatings().add((double) rate);
         currentMovie.calculateRating();
+
         user.getRatedMovies().add(currentMovie);
+
         return SUCCESS_RATE_MOVIE;
     }
 
-    public String like(String movieName) {
-        if (movieName != null && !currentMovie.getName().equals(movieName))
-            return ERROR_LIKE_INVALID_MOVIE;
-
+    public String like() {
         User user = state.user;
         if (!user.getWatchedMovies().contains(currentMovie))
             return ERROR_LIKE_NOT_WATCHED;
 
         currentMovie.incNumLikes();
+
         user.getLikedMovies().add(currentMovie);
         return SUCCESS_LIKE_MOVIE;
     }
 
-    public String watch(String movieName) {
-        if (movieName != null && !currentMovie.getName().equals(movieName))
-            return ERROR_WATCH_INVALID_MOVIE;
-
+    public String watch() {
         User user = state.user;
         if (user.getWatchedMovies().contains(currentMovie))
             return ERROR_WATCH_ALREADY_WATCHED;
@@ -153,10 +147,7 @@ public class Viewmodel {
         return SUCCESS_WATCH_MOVIE;
     }
 
-    public String purchase(String movieName) {
-        if (movieName != null && !currentMovie.getName().equals(movieName))
-            return ERROR_PURCHASE_INVALID_MOVIE;
-
+    public String purchase() {
         User user = state.user;
         if (user.getPurchasedMovies().contains(currentMovie))
             return ERROR_PURCHASE_ALREADY_BOUGHT;
@@ -193,7 +184,7 @@ public class Viewmodel {
 
         loadMovies();
         ArrayList<Movie> newMovies = new ArrayList<>();
-        FilterSort filterSort = filter.getSort();
+
         FilterContains filterContains = filter.getContains();
 
         if (filterContains != null) {
@@ -210,6 +201,7 @@ public class Viewmodel {
         }
         state.movies = newMovies;
 
+        FilterSort filterSort = filter.getSort();
         if (filterSort != null) {
             state.movies.sort((m1, m2) -> {
                 int comp = 0;
