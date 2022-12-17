@@ -137,14 +137,14 @@ public final class Test {
             String testFileName = testFile.getName();
 
             // CHANGE HERE TO NEXT TEST
-            if (testFileName.equals("basic_3.json")) {
+//            if (testFileName.equals("basic_5.json")) {
                 preTestCleanUp();
 
                 final String[] testArgv = createTestArgv(testFile);
                 final Future<Object> future = createTimerTask(testArgv);
 
                 runTest(testFileName, config, future);
-            }
+//            }
         }
 
         score += Checkstyle.testCheckstyle();

@@ -1,7 +1,7 @@
 package user;
 
 import input.Credentials;
-import input.Movie;
+import movie.Movie;
 import input.UserInput;
 import viewmodel.Viewmodel;
 
@@ -36,6 +36,10 @@ public class User {
         this.watchedMovies = viewmodel.getArrayCopy(user.watchedMovies);
         this.likedMovies = viewmodel.getArrayCopy(user.likedMovies);
         this.ratedMovies = viewmodel.getArrayCopy(user.ratedMovies);
+    }
+
+    public void addTokens(int tokens) {
+        this.tokensCount += tokens;
     }
 
     public Credentials getCredentials() {

@@ -55,9 +55,9 @@ public class Model {
         String result = viewmodel.doAction(action);
         System.out.println("result: " + result);
         switch (result) {
-            case USER_ALREADY_EXISTS, USER_NOT_FOUND, PAGE_NOT_FOUND, FEATURE_NOT_FOUND -> addDefaultNode(ERROR);
+            case USER_ALREADY_EXISTS, USER_NOT_FOUND, PAGE_NOT_FOUND, FEATURE_NOT_FOUND, MOVIE_NOT_FOUND -> addDefaultNode(ERROR);
             case SUCCESS_LOGIN , SUCCESS_SEARCH, SUCCESS_PAGE_CHANGE_MOVIES, SUCCESS_FILTER -> addDefaultNode(null);
-            case SUCCESS_PAGE_CHANGE -> {}
+            case SUCCESS_PAGE_CHANGE, SUCCESS_BUY_TOKENS -> {}
         }
     }
 

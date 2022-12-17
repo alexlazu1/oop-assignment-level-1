@@ -1,5 +1,7 @@
 package input;
 
+import movie.Movie;
+
 import java.util.ArrayList;
 
 public class Input {

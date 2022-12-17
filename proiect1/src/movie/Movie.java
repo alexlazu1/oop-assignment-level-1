@@ -1,7 +1,6 @@
-package input;
+package movie;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class Movie {
     private String name;

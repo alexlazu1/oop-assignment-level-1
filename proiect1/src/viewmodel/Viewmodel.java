@@ -5,17 +5,16 @@ import input.*;
 import movie.Filter;
 import movie.FilterContains;
 import movie.FilterSort;
+import movie.Movie;
 import page.PageFactory;
 import page.PageFactory.PageType;
 import user.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Objects;
 
 import static constants.Constants.*;
-import static page.PageFactory.PageType.Logout;
-import static page.PageFactory.PageType.Movies;
+import static page.PageFactory.PageType.*;
 
 public class Viewmodel {
     Input input;
@@ -24,7 +23,7 @@ public class Viewmodel {
 
     ArrayList<User> users;
     ArrayList<Movie> movies;
-
+    ActionsInput action;
 
     private final static Viewmodel instance = new Viewmodel();
 
@@ -37,6 +36,7 @@ public class Viewmodel {
 
     public void initializeViewmodel(Input input, ArrayNode output) {
         this.state = State.getInstance();
+        resetState();
 
         this.input = input;
         this.output = output;
@@ -55,6 +55,8 @@ public class Viewmodel {
 
 
     public String doAction(ActionsInput action) {
+        this.action = action;
+
         if (action.getType().equals(CHANGE_PAGE)) {
             return changePage(action.getPage());
         } else {
@@ -73,6 +75,9 @@ public class Viewmodel {
                 case "filter" -> {
                     return filter(action.getFilters());
                 }
+                case "buy tokens" -> {
+                    return buyTokens(action.getCount());
+                }
                 default -> {
                     System.out.println("INVALID COMMAND!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n");
                     return "INVALID";
@@ -81,8 +86,15 @@ public class Viewmodel {
         }
     }
 
+    public String buyTokens(String count) {
+        int tokens = Integer.parseInt(count);
+        state.user.addTokens(tokens);
+
+        return SUCCESS_BUY_TOKENS;
+    }
+
     public String filter(Filter filter) {
-        ArrayList<Movie> copyMovies = getArrayCopy(movies);
+        loadMovies();
         ArrayList<Movie> newMovies = new ArrayList<>();
         FilterSort filterSort = filter.getSort();
         FilterContains filterContains = filter.getContains();
@@ -90,29 +102,28 @@ public class Viewmodel {
         if (filterContains != null) {
             ArrayList<String> actors = filterContains.getActors();
             ArrayList<String> genre = filterContains.getGenre();
-            for (Movie movie : copyMovies) {
-                if ((actors.size() > 0 && !movie.getActors().containsAll(actors))
-                        || (genre.size() > 0 && !movie.getGenres().containsAll(genre)))
+            for (Movie movie : state.movies) {
+                if ((actors != null && !movie.getActors().containsAll(actors))
+                        || (genre != null && !movie.getGenres().containsAll(genre)))
                     continue;
                 newMovies.add(movie);
             }
+        } else {
+            newMovies = state.movies;
         }
+        state.movies = newMovies;
+
         if (filterSort != null) {
             int ratingSort = (filterSort.getRating().equals("increasing")) ? 1 : -1;
             int durationSort = (filterSort.getDuration().equals("increasing")) ? 1 : -1;
-            newMovies.sort(new Comparator<Movie>() {
-                @Override
-                public int compare(Movie m1, Movie m2) {
-                    if (m1.getRating() != m2.getRating())
-                        return (int) (ratingSort * m1.getRating() - ratingSort * m2.getRating());
-                    else {
-                        return durationSort * m1.getDuration() - durationSort * m2.getDuration();
-                    }
+            state.movies.sort((m1, m2) -> {
+                if (m1.getRating() != m2.getRating())
+                    return (int) (ratingSort * m1.getRating() - ratingSort * m2.getRating());
+                else {
+                    return durationSort * m1.getDuration() - durationSort * m2.getDuration();
                 }
             });
         }
-
-        state.movies = newMovies;
 
         return SUCCESS_FILTER;
     }
@@ -201,18 +212,32 @@ public class Viewmodel {
             if (pageType.getName().equals(pageName)) {
                 System.out.println("Page(" + pageName + ") found");
 
+                // we leave movies Page
                 if (state.page.getType() == Movies) {
                     resetMovies();
                 }
 
                 if (pageType == Logout) {
                     resetState();
+                    return SUCCESS_PAGE_CHANGE;
+                } else if (pageType == Movies) {
+                    state.page = PageFactory.createPage(pageType);
+                    return SUCCESS_PAGE_CHANGE_MOVIES;
+                } else if (pageType == SeeDetails) {
+
+                    for (Movie movie : state.movies) {
+                        if (Objects.equals(movie.getName(), action.getMovie())) {
+                            state.movies = new ArrayList<>();
+                            state.movies.add(new Movie(movie));
+                            state.page = PageFactory.createPage(pageType);
+                            return SUCCESS_SEE_DETAILS;
+                        }
+                    }
+                    return MOVIE_NOT_FOUND;
+
                 } else {
                     state.page = PageFactory.createPage(pageType);
-                    if (pageType == Movies) {
-                        return SUCCESS_PAGE_CHANGE_MOVIES;
-                    } else
-                        return SUCCESS_PAGE_CHANGE;
+                    return SUCCESS_PAGE_CHANGE;
                 }
             }
         }
