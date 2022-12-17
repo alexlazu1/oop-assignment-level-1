@@ -28,7 +28,7 @@ public class Model {
     ArrayNode output;
     String outFileName;
 
-    public Model(String inName, String outName) throws IOException {
+    public Model(final String inName, final String outName) throws IOException {
         this.mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         this.input = mapper.readValue(new File(inName), Input.class);
         this.output = mapper.createArrayNode();
@@ -51,7 +51,7 @@ public class Model {
         }
     }
 
-    public void solveAction(ActionsInput action) {
+    public void solveAction(final ActionsInput action) {
         String result = viewmodel.doAction(action);
         if(state.page.getType() == PageFactory.PageType.SeeDetails)
             System.out.println("result (" + state.page.getType() + "): " + result);
@@ -84,14 +84,11 @@ public class Model {
         }
     }
 
-    public void addDefaultNode(String error) {
+    public void addDefaultNode(final String error) {
         ObjectNode node = mapper.createObjectNode();
         node.put("error", error);
-        //TODO: SAME AS BELLOW
-        if (error == null) {
-//            System.out.println("\n\nmovies: " + state.movies + "\n\n");
+        if (error == null)
             node.putPOJO("currentMoviesList", viewmodel.getArrayCopy(state.movies));
-        }
         else
             node.putPOJO("currentMoviesList", new ArrayList<>());
 

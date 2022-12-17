@@ -6,7 +6,7 @@ import user.User;
 
 import java.util.ArrayList;
 
-public class State {
+public final class State {
     public Page page;
     public User user;
     public ArrayList<Movie> movies;

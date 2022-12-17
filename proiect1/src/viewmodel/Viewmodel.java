@@ -13,7 +13,7 @@ import java.util.Objects;
 import static constants.Constants.*;
 import static page.PageFactory.PageType.*;
 
-public class Viewmodel {
+public final class Viewmodel {
     Input input;
     State state;
     ArrayNode output;
@@ -32,7 +32,7 @@ public class Viewmodel {
         return instance;
     }
 
-    public void initializeViewmodel(Input input, ArrayNode output) {
+    public void initializeViewmodel(final Input input, final ArrayNode output) {
         this.state = State.getInstance();
         resetState();
 
@@ -49,14 +49,13 @@ public class Viewmodel {
     }
 
 
-    public String doAction(ActionsInput action) {
+    public String doAction(final ActionsInput action) {
         this.action = action;
 
         if (action.getType().equals(CHANGE_PAGE)) {
             return changePage(action.getPage());
         } else {
             if (!findFeature(action.getFeature())) {
-//                System.out.println("Did not find feature: (" + action.getFeature() + ") for page: (" + state.page.getType() + ")");
                 return FEATURE_NOT_FOUND;
             }
             switch (action.getFeature()) {

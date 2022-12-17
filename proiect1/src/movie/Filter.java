@@ -1,6 +1,6 @@
 package movie;
 
-public class Filter {
+public final class Filter {
     private FilterSort sort;
     private FilterContains contains;
 
@@ -11,7 +11,7 @@ public class Filter {
         return sort;
     }
 
-    public void setSort(FilterSort sort) {
+    public void setSort(final FilterSort sort) {
         this.sort = sort;
     }
 
@@ -19,7 +19,7 @@ public class Filter {
         return contains;
     }
 
-    public void setContains(FilterContains contains) {
+    public void setContains(final FilterContains contains) {
         this.contains = contains;
     }
 

@@ -14,7 +14,7 @@ public class PageFactory {
 
         private String name;
 
-        PageType(String name) {
+        PageType(final String name) {
             this.name = name;
         }
 
@@ -22,12 +22,12 @@ public class PageFactory {
             return name;
         }
 
-        public void setName(String name) {
+        public void setName(final String name) {
             this.name = name;
         }
     }
 
-    public static Page createPage(PageType pageType) {
+    public static Page createPage(final PageType pageType) {
         switch (pageType) {
             case HomeNotAuth:
                 return new HomeNotAuth();
