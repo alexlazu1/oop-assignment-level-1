@@ -1,6 +1,6 @@
 package input;
 
-public class CredentialsInput {
+public class Credentials {
     private String name;
     private String password;
     private String accountType;

@@ -5,7 +5,7 @@ import movie.Filter;
 public class ActionsInput {
     private String type;
     private String page;
-    private CredentialsInput credentials;
+    private Credentials credentials;
     private String feature;
     private Filter filters;
     private String movie; // the name of the movie;
@@ -34,11 +34,11 @@ public class ActionsInput {
         this.page = page;
     }
 
-    public CredentialsInput getCredentials() {
+    public Credentials getCredentials() {
         return credentials;
     }
 
-    public void setCredentials(CredentialsInput credentials) {
+    public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
     }
 

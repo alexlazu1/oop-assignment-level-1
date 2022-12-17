@@ -181,6 +181,7 @@ public final class Test {
         } else {
             try {
                 var actual = objectMapper.readTree(TEST_OUT_FILE);
+                System.out.println("TREE:\n\n\n\n" + actual + "\n\n\n");
                 var expected = objectMapper.readTree(refFile);
 
                 final int testScore = testMaxScore(config, testFileName);
@@ -217,7 +218,7 @@ public final class Test {
     }
 
     private static void preTestCleanUp() {
-        TEST_OUT_FILE.delete();
+//        TEST_OUT_FILE.delete();
     }
 
     private static void printMessage(

@@ -1,13 +1,13 @@
 package input;
 
 public class UserInput {
-    private CredentialsInput credentials;
+    private Credentials credentials;
 
-    public CredentialsInput getCredentials() {
+    public Credentials getCredentials() {
         return credentials;
     }
 
-    public void setCredentials(CredentialsInput credentials) {
+    public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
     }
 

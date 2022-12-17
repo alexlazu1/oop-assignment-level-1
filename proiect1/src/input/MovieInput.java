@@ -13,6 +13,15 @@ public class MovieInput {
     public MovieInput() {
     }
 
+    public MovieInput(MovieInput movie) {
+        this.name = movie.name;
+        this.year = movie.year;
+        this.duration = movie.duration;
+        this.genres = movie.genres;
+        this.countriesBanned = movie.countriesBanned;
+        this.actors = movie.actors;
+    }
+
     public String getName() {
         return name;
     }
