@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Input {
     private ArrayList<UserInput> users;
-    private ArrayList<MovieInput> movies;
+    private ArrayList<Movie> movies;
     private ArrayList<ActionsInput> actions;
 
     public Input() {
@@ -18,11 +18,11 @@ public class Input {
         this.users = users;
     }
 
-    public ArrayList<MovieInput> getMovies() {
+    public ArrayList<Movie> getMovies() {
         return movies;
     }
 
-    public void setMovies(ArrayList<MovieInput> movies) {
+    public void setMovies(ArrayList<Movie> movies) {
         this.movies = movies;
     }
 

@@ -1,6 +1,7 @@
 package page;
 
 import page.PageFactory.PageType;
+import viewmodel.Viewmodel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +70,10 @@ class HomeAuth extends Page {
 class Movies extends Page {
     public Movies() {
         name = "movies";
+
         nextPages = new ArrayList<>(List.of(PageType.HomeNotAuth,PageType.SeeDetails, PageType.Logout));
         features = new ArrayList<>(List.of("search", "filter"));
+        Viewmodel.getInstance().loadMovies();
     }
 }
 

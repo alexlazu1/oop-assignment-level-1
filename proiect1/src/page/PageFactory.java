@@ -1,5 +1,7 @@
 package page;
 
+import viewmodel.Viewmodel;
+
 public class PageFactory {
     public enum PageType {
         HomeAuth("home auth"),
@@ -39,8 +41,6 @@ public class PageFactory {
                 return new Movies();
             case Upgrades:
                 return new Upgrades();
-            case Logout:
-                return new Logout();
             case SeeDetails:
                 return new SeeDetails();
         }

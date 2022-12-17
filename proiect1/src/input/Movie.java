@@ -2,7 +2,7 @@ package input;
 
 import java.util.ArrayList;
 
-public class MovieInput {
+public class Movie {
     private String name;
     private int year;
     private int duration;
@@ -10,16 +10,23 @@ public class MovieInput {
     private ArrayList<String> countriesBanned;
     private ArrayList<String> actors;
 
-    public MovieInput() {
+    private int numLikes = 0;
+    private int numRatings = 0;
+    private double rating = 0;
+
+    public Movie() {
     }
 
-    public MovieInput(MovieInput movie) {
+    public Movie(Movie movie) {
         this.name = movie.name;
         this.year = movie.year;
         this.duration = movie.duration;
         this.genres = movie.genres;
         this.countriesBanned = movie.countriesBanned;
         this.actors = movie.actors;
+        this.numLikes = movie.numLikes;
+        this.numRatings = movie.numRatings;
+        this.rating = movie.rating;
     }
 
     public String getName() {
@@ -70,15 +77,27 @@ public class MovieInput {
         this.actors = actors;
     }
 
-    @Override
-    public String toString() {
-        return "MovieInput{" +
-                "name='" + name + '\'' +
-                ", year=" + year +
-                ", duration=" + duration +
-                ", genres=" + genres +
-                ", countriesBanned=" + countriesBanned +
-                ", actors=" + actors +
-                '}';
+    public int getNumLikes() {
+        return numLikes;
+    }
+
+    public void setNumLikes(int numLikes) {
+        this.numLikes = numLikes;
+    }
+
+    public int getNumRatings() {
+        return numRatings;
+    }
+
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

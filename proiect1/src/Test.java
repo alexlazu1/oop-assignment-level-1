@@ -137,7 +137,7 @@ public final class Test {
             String testFileName = testFile.getName();
 
             // CHANGE HERE TO NEXT TEST
-            if (testFileName.equals("basic_1.json")) {
+            if (testFileName.equals("basic_2.json")) {
                 preTestCleanUp();
 
                 final String[] testArgv = createTestArgv(testFile);
@@ -181,7 +181,6 @@ public final class Test {
         } else {
             try {
                 var actual = objectMapper.readTree(TEST_OUT_FILE);
-                System.out.println("TREE:\n\n\n\n" + actual + "\n\n\n");
                 var expected = objectMapper.readTree(refFile);
 
                 final int testScore = testMaxScore(config, testFileName);

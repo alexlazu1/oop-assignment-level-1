@@ -1,7 +1,7 @@
 package user;
 
 import input.Credentials;
-import input.MovieInput;
+import input.Movie;
 import input.UserInput;
 import viewmodel.Viewmodel;
 
@@ -11,10 +11,10 @@ public class User {
     private Credentials credentials;
     private int tokensCount;
     private int numFreePremiumMovies = 15;
-    private ArrayList<MovieInput> purchasedMovies = new ArrayList<>();
-    private ArrayList<MovieInput> watchedMovies= new ArrayList<>();
-    private ArrayList<MovieInput> likedMovies= new ArrayList<>();
-    private ArrayList<MovieInput> ratedMovies= new ArrayList<>();
+    private ArrayList<Movie> purchasedMovies = new ArrayList<>();
+    private ArrayList<Movie> watchedMovies= new ArrayList<>();
+    private ArrayList<Movie> likedMovies= new ArrayList<>();
+    private ArrayList<Movie> ratedMovies= new ArrayList<>();
 
     public User() {
     }
@@ -62,35 +62,35 @@ public class User {
         this.numFreePremiumMovies = numFreePremiumMovies;
     }
 
-    public ArrayList<MovieInput> getPurchasedMovies() {
+    public ArrayList<Movie> getPurchasedMovies() {
         return purchasedMovies;
     }
 
-    public void setPurchasedMovies(ArrayList<MovieInput> purchasedMovies) {
+    public void setPurchasedMovies(ArrayList<Movie> purchasedMovies) {
         this.purchasedMovies = purchasedMovies;
     }
 
-    public ArrayList<MovieInput> getWatchedMovies() {
+    public ArrayList<Movie> getWatchedMovies() {
         return watchedMovies;
     }
 
-    public void setWatchedMovies(ArrayList<MovieInput> watchedMovies) {
+    public void setWatchedMovies(ArrayList<Movie> watchedMovies) {
         this.watchedMovies = watchedMovies;
     }
 
-    public ArrayList<MovieInput> getLikedMovies() {
+    public ArrayList<Movie> getLikedMovies() {
         return likedMovies;
     }
 
-    public void setLikedMovies(ArrayList<MovieInput> likedMovies) {
+    public void setLikedMovies(ArrayList<Movie> likedMovies) {
         this.likedMovies = likedMovies;
     }
 
-    public ArrayList<MovieInput> getRatedMovies() {
+    public ArrayList<Movie> getRatedMovies() {
         return ratedMovies;
     }
 
-    public void setRatedMovies(ArrayList<MovieInput> ratedMovies) {
+    public void setRatedMovies(ArrayList<Movie> ratedMovies) {
         this.ratedMovies = ratedMovies;
     }
 

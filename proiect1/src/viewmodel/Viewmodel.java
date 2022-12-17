@@ -2,7 +2,6 @@ package viewmodel;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.*;
-import page.Page;
 import page.PageFactory;
 import page.PageFactory.PageType;
 import user.User;
@@ -11,28 +10,41 @@ import java.util.ArrayList;
 
 import static constants.Constants.*;
 import static page.PageFactory.PageType.Logout;
+import static page.PageFactory.PageType.Movies;
 
 public class Viewmodel {
     Input input;
     State state;
     ArrayNode output;
+
     ArrayList<User> users;
+    ArrayList<Movie> movies;
+
+
     private final static Viewmodel instance = new Viewmodel();
 
-    private Viewmodel() {}
+    private Viewmodel() {
+    }
 
     public static Viewmodel getInstance() {
         return instance;
     }
 
-    public void initializeViewmodel(Input input, ArrayNode output){
-        this.state = new State();
-        resetState();
-        this.users = new ArrayList<User>();
+    public void initializeViewmodel(Input input, ArrayNode output) {
+        this.state = State.getInstance();
+
         this.input = input;
         this.output = output;
+
+
+        this.movies = new ArrayList<Movie>();
+        for (Movie movie : input.getMovies()) {
+            this.movies.add(new Movie(movie));
+        }
+
+        this.users = new ArrayList<User>();
         for (UserInput userInput : input.getUsers()) {
-            users.add(new User(userInput));
+            this.users.add(new User(userInput));
         }
     }
 
@@ -50,12 +62,28 @@ public class Viewmodel {
                 case "register" -> {
                     return register(action.getCredentials());
                 }
+                case "search" -> {
+                    return search(action.getStartsWith());
+                }
                 default -> {
                     System.out.println("INVALID COMMAND!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n");
                     return "INVALID";
                 }
             }
         }
+    }
+
+    public String search(String startsWith) {
+        ArrayList<Movie> newMovies = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            if (movie.getName().startsWith(startsWith))
+                newMovies.add(movie);
+        }
+
+        state.movies = newMovies;
+
+        return SUCCESS_SEARCH;
     }
 
     public void resetState() {
@@ -93,7 +121,7 @@ public class Viewmodel {
             if (user.getCredentials().getName().equals(name) && user.getCredentials().getPassword().equals(password)) {
                 state.user = user;
                 state.page = PageFactory.createPage(PageType.HomeAuth);
-                return SUCCESS;
+                return SUCCESS_LOGIN;
             }
         }
 
@@ -102,17 +130,37 @@ public class Viewmodel {
         return USER_NOT_FOUND;
     }
 
+    public void loadMovies() {
+        state.movies = new ArrayList<>();
+
+        String country = state.user.getCredentials().getCountry();
+
+        for (Movie movie : movies) {
+            if (!isMovieBanned(movie, country)) {
+                state.movies.add(movie);
+            }
+        }
+    }
+
+    public boolean isMovieBanned(Movie movie, String country) {
+        return movie.getCountriesBanned().contains(country);
+    }
+
     public String changePage(String pageName) {
         /* Search the page */
         for (PageType pageType : state.page.getNextPages()) {
             if (pageType.getName().equals(pageName)) {
                 System.out.println("Page(" + pageName + ") found");
-                state.page = PageFactory.createPage(pageType);
 
-                if (pageName.equals(Logout.getName()))
+                if (pageType == Logout) {
                     resetState();
-
-                return SUCCESS_PAGE_CHANGE;
+                } else {
+                    state.page = PageFactory.createPage(pageType);
+                    if (pageType == Movies)
+                        return SUCCESS_PAGE_CHANGE_MOVIES;
+                    else
+                        return SUCCESS_PAGE_CHANGE;
+                }
             }
         }
 
@@ -121,10 +169,10 @@ public class Viewmodel {
         return PAGE_NOT_FOUND;
     }
 
-    public ArrayList<MovieInput> getArrayCopy(ArrayList<MovieInput> array) {
-        ArrayList<MovieInput> newArr = new ArrayList<>();
-        for (MovieInput movie : array) {
-            newArr.add(new MovieInput(movie));
+    public ArrayList<Movie> getArrayCopy(ArrayList<Movie> array) {
+        ArrayList<Movie> newArr = new ArrayList<>();
+        for (Movie movie : array) {
+            newArr.add(new Movie(movie));
         }
         return newArr;
     }
@@ -151,6 +199,22 @@ public class Viewmodel {
 
     public void setOutput(ArrayNode output) {
         this.output = output;
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
+
+    public ArrayList<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(ArrayList<Movie> movies) {
+        this.movies = movies;
     }
 
 }

@@ -44,7 +44,6 @@ public class Model {
             for (ActionsInput action : input.getActions()) {
                 solveAction(action);
             }
-            System.out.println("WRITING");
             writer.writeValue(new File(outFileName), output);
         } catch (Exception e) {
             System.out.println("Exception:" + e);
@@ -56,15 +55,9 @@ public class Model {
         String result = viewmodel.doAction(action);
         System.out.println("result: " + result);
         switch (result) {
-            case USER_ALREADY_EXISTS, USER_NOT_FOUND, PAGE_NOT_FOUND, FEATURE_NOT_FOUND -> {
-
-                addDefaultNode(ERROR);
-            }
-            case SUCCESS -> {
-                addDefaultNode(null);
-            }
-            case SUCCESS_PAGE_CHANGE -> {
-            }
+            case USER_ALREADY_EXISTS, USER_NOT_FOUND, PAGE_NOT_FOUND, FEATURE_NOT_FOUND -> addDefaultNode(ERROR);
+            case SUCCESS_LOGIN , SUCCESS_SEARCH, SUCCESS_PAGE_CHANGE_MOVIES -> addDefaultNode(null);
+            case SUCCESS_PAGE_CHANGE -> {}
         }
     }
 
